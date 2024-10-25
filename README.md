@@ -10,14 +10,14 @@ Shamelessly taken & mixed from
 
 - Dockerfile
   ```docker
-  FROM bergalath/bookworm-ruby:2.4-2
+  FROM bergalath/bookworm-ruby:2.4-3
   ```
 
 - compose.yml
   ```yaml
   services:
     […]
-      image: bergalath/bookworm-ruby:2.4-2
+      image: bergalath/bookworm-ruby:2.4-3
   ```
 
 Check https://hub.docker.com/_/ruby for more details  
