@@ -9,15 +9,15 @@ Shamelessly taken & mixed from
 # Usage
 
 - Dockerfile
-```docker
-FROM bergalath/bookworm-ruby:2.4-2
-```
+  ```docker
+  FROM bergalath/bookworm-ruby:2.4-2
+  ```
 
 - compose.yml
-```yaml
-services:
-  […]
-    image: bergalath/bookworm-ruby:2.4-2
-```
+  ```yaml
+  services:
+    […]
+      image: bergalath/bookworm-ruby:2.4-2
+  ```
 
 Then follow https://bundler.io/guides/bundler_docker_guide.html as usual
