@@ -10,8 +10,8 @@ RUN set -eux; \
 
 ENV LANG=C.UTF-8
 ENV RUBY_VERSION=2.4.10
-ENV RUBY_DOWNLOAD_URL=https://cache.ruby-lang.org/pub/ruby/ruby-$RUBY_VERSION.tar.xz
-ENV RUBY_DOWNLOAD_SHA256=d5668ed11544db034f70aec37d11e157538d639ed0d0a968e2f587191fc530df
+ARG RUBY_DOWNLOAD_URL=https://cache.ruby-lang.org/pub/ruby/ruby-$RUBY_VERSION.tar.xz
+ARG RUBY_DOWNLOAD_SHA256=d5668ed11544db034f70aec37d11e157538d639ed0d0a968e2f587191fc530df
 
 # Bidouille pour installer OpenSSL 1.1.1w via ruby-build : bookworm fournit OpenSSL 3.0
 ADD --chmod=755 https://raw.githubusercontent.com/rbenv/ruby-build/master/bin/ruby-build /usr/local/bin/ruby-build
