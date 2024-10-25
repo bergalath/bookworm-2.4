@@ -20,4 +20,5 @@ Shamelessly taken & mixed from
       image: bergalath/bookworm-ruby:2.4-2
   ```
 
-Then follow https://bundler.io/guides/bundler_docker_guide.html as usual
+Check https://hub.docker.com/_/ruby for more details
+And follow https://bundler.io/guides/bundler_docker_guide.html as usual
