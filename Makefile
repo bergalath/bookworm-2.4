@@ -7,3 +7,6 @@ run:
 
 push: build
 	docker push bergalath/bookworm-ruby:2.4-3
+
+setup:
+	wget -qO- https://github.com/ruby/www.ruby-lang.org/raw/master/_data/releases.yml
