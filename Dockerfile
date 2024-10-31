@@ -17,7 +17,7 @@ ARG RUBY_DOWNLOAD_SHA256=d5668ed11544db034f70aec37d11e157538d639ed0d0a968e2f5871
 ADD --chmod=755 https://raw.githubusercontent.com/rbenv/ruby-build/master/bin/ruby-build /usr/local/bin/ruby-build
 ADD https://raw.githubusercontent.com/rbenv/ruby-build/master/share/ruby-build/$RUBY_VERSION /tmp/ruby-$RUBY_VERSION
 RUN sed -i '/ruby-$RUBY_VERSION/d' /tmp/ruby-$RUBY_VERSION && \
-	ruby-build /tmp/ruby-$RUBY_VERSION /usr/local
+    ruby-build /tmp/ruby-$RUBY_VERSION /usr/local
 
 # some of ruby's build scripts are written in ruby
 #   we purge system ruby later to make sure our final image uses what we just built
@@ -62,16 +62,6 @@ RUN set -eux; \
 	make -j "$(nproc)"; \
 	make install; \
 	\
-	apt-mark auto '.*' > /dev/null; \
-	apt-mark manual $savedAptMark > /dev/null; \
-	find /usr/local -type f -executable -not \( -name '*tkinter*' \) -exec ldd '{}' ';' \
-		| awk '/=>/ { so = $(NF-1); if (index(so, "/usr/local/") == 1) { next }; gsub("^/(usr/)?", "", so); printf "*%s\n", so }' \
-		| sort -u \
-		| xargs -r dpkg-query --search \
-		| cut -d: -f1 \
-		| sort -u \
-		| xargs -r apt-mark manual \
-	; \
 	apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false; \
 	\
 	cd /; \
@@ -94,3 +84,14 @@ RUN set -eux; \
 	chmod 1777 "$GEM_HOME"
 
 CMD [ "irb" ]
+
+RUN apt-mark auto '.*' > /dev/null; \
+    apt-mark manual $savedAptMark > /dev/null; \
+    find /usr/local -type f -executable -not \( -name '*tkinter*' \) -exec ldd '{}' ';' \
+      | awk '/=>/ { so = $(NF-1); if (index(so, "/usr/local/") == 1) { next }; gsub("^/(usr/)?", "", so); printf "*%s\n", so }' \
+      | sort -u \
+      | xargs -r dpkg-query --search \
+      | cut -d: -f1 \
+      | sort -u \
+      | xargs -r apt-mark manual \
+    ; \
