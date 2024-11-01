@@ -14,11 +14,26 @@ RUN set -eux; \
 		libssl-dev \
 		libyaml-dev \
 		zlib1g-dev \
+		wget \
+		bison \
+		curl \
+		dpkg-dev \
+		libgdbm-dev \
+		ruby \
+		autoconf \
+		g++ \
+		gcc \
+		libbz2-dev \
+		libgdbm-compat-dev \
+		libglib2.0-dev \
+		libncurses-dev \
+		libreadline-dev \
+		libxml2-dev \
+		libxslt-dev \
+		make \
 	; \
-	rm -rf /var/lib/apt/lists/*
-
+	rm -rf /var/lib/apt/lists/*; \
 # skip installing gem documentation
-RUN set -eux; \
 	mkdir -p /usr/local/etc; \
 	{ \
 		echo 'install: --no-document'; \
@@ -39,30 +54,8 @@ RUN sed -i '/ruby-$RUBY_VERSION/d' /tmp/ruby-$RUBY_VERSION && \
 
 # some of ruby's build scripts are written in ruby
 #   we purge system ruby later to make sure our final image uses what we just built
+# https://github.com/docker-library/ruby/pull/438
 RUN set -eux; \
-	buildDeps=' \
-		bison \
-		dpkg-dev \
-		libgdbm-dev \
-		ruby \
-		autoconf \
-		g++ \
-		gcc \
-		libbz2-dev \
-		libgdbm-compat-dev \
-		libglib2.0-dev \
-		libncurses-dev \
-		libreadline-dev \
-		libxml2-dev \
-		libxslt-dev \
-		make \
-		wget \
-	'; \
-	apt-get update; \
-	apt-get install -y --no-install-recommends $buildDeps; \
-		# https://github.com/docker-library/ruby/pull/438
-	rm -rf /var/lib/apt/lists/*; \
-	\
 	wget -O ruby.tar.gz "$RUBY_DOWNLOAD_URL"; \
 	echo "$RUBY_DOWNLOAD_SHA256 *ruby.tar.gz" | sha256sum --check --strict; \
 	\

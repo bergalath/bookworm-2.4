@@ -5,7 +5,7 @@ MAKEFLAGS += --always-make --no-builtin-rules --warn-undefined-variables
 .SILENT:
 
 variant = bookworm
-image = bergalath/$(variant)-ruby:2.4-4
+image = bergalath/$(variant)-ruby:2.4-5
 
 build:
 	docker build -t $(image) .
