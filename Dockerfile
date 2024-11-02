@@ -1,22 +1,29 @@
 FROM buildpack-deps:bookworm
 
-# skip installing gem documentation
-RUN mkdir -p /usr/local/etc; \
-    { \
-      echo 'install: --no-document'; \
-      echo 'update: --no-document'; \
-    } >> /usr/local/etc/gemrc
-
 ENV LANG=C.UTF-8
 ENV RUBY_VERSION=2.4.10
 
-# Bidouille pour installer OpenSSL 1.1.1w via ruby-build : bookworm fournit OpenSSL 3.0
+# Using https://github.com/rbenv/ruby-build to install OpenSSL 1.1 in bookworm
 ADD --chmod=755 https://raw.githubusercontent.com/rbenv/ruby-build/master/bin/ruby-build /usr/local/bin/ruby-build
-ADD https://raw.githubusercontent.com/rbenv/ruby-build/master/share/ruby-build/$RUBY_VERSION /tmp/ruby-$RUBY_VERSION
+ADD https://raw.githubusercontent.com/rbenv/ruby-build/master/share/ruby-build/$RUBY_VERSION /tmp/ruby.build
+
 RUN set -eux; \
-    ruby-build /tmp/ruby-$RUBY_VERSION /usr/local; \
+    mkdir -p /usr/local/etc; \
+    { \
+      echo 'install: --no-document'; \
+      echo 'update: --no-document'; \
+    } >> /usr/local/etc/gemrc; \
+    ruby-build /tmp/ruby.build /usr/local; \
     rm -rf /tmp/*; \
     ruby --version; \
     gem update --system 3.3.27 --no-doc
+
+# The unpleasant part : https://wiki.archlinux.org/title/Ruby#Configuration
+# https://felipec.wordpress.com/2023/02/27/fixing-ruby-gems-installation-part-2/
+ENV GEM_HOME="$(gem env user_gemhome)"
+ENV PATH=$GEM_HOME/bin:$GEM_HOME/gems/bin:$PATH
+
+# Then, you should `bundle config set --local path '~/some/path' in your app folder
+# https://wiki.archlinux.org/title/Ruby#Bundler
 
 CMD [ "irb" ]
